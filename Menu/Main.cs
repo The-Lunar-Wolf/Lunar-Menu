@@ -14,6 +14,7 @@ using static LunarMenu.Notifications.NotifiLib;
 using GorillaLocomotion;
 using System.IO;
 using LunarMenu;
+using System.Collections;
 
 namespace LunarMenu.Menu
 {
@@ -612,7 +613,7 @@ namespace LunarMenu.Menu
             GameObject pointer;
             if (!rightHanded)
             {
-                Physics.Raycast(player.rightControllerTransform.transform.position, -player.rightControllerTransform.transform.right, out ray);
+                Physics.Raycast(player.rightControllerTransform.transform.position, player.rightControllerTransform.transform.forward, out ray);
                 pointer = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 pointer.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
                 pointer.transform.position = ray.point;
@@ -623,7 +624,7 @@ namespace LunarMenu.Menu
             }
             else
             {
-                Physics.Raycast(player.leftControllerTransform.transform.position, -player.leftControllerTransform.transform.right, out ray);
+                Physics.Raycast(player.leftControllerTransform.transform.position, player.leftControllerTransform.transform.forward, out ray);
                 pointer = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 pointer.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
                 pointer.transform.position = ray.point;
@@ -665,24 +666,28 @@ namespace LunarMenu.Menu
         }
 
         private string Mods;
-        void OnDisable()
+        private void OnDisable()
         {
-            if (!Directory.Exists(Path.Combine(Application.persistentDataPath, "LunarMenu")))
+            Mods = string.Empty;
+            string lunarMenuPath = Path.Combine(Application.persistentDataPath, "LunarMenu");
+
+            if (!Directory.Exists(lunarMenuPath))
             {
-                Directory.CreateDirectory(Application.persistentDataPath);
+                Directory.CreateDirectory(lunarMenuPath);
             }
 
-            foreach (ButtonInfo[] Buton in buttons)
+            foreach (ButtonInfo[] buttonGroup in buttons)
             {
-                foreach (ButtonInfo buton in Buton)
+                foreach (ButtonInfo button in buttonGroup)
                 {
-                    if (buton.enabled)
+                    if (button.enabled)
                     {
-                        Mods += buton.buttonText + ";";
+                        Mods += button.buttonText + ";";
                     }
                 }
             }
-            File.WriteAllText(Path.Combine(Application.persistentDataPath, "LunarMenu", "LunarMenuPreset"), Mods);
+
+            File.WriteAllText(Path.Combine(lunarMenuPath, "LunarMenuPreset"), Mods);
         }
 
         public static void FireProjectile(string projectileName, Vector3 pos, Vector3 direction, Color projectileColor, float speed)
@@ -717,8 +722,8 @@ namespace LunarMenu.Menu
         {
             if (ghostViewObject != null)
             {
-                Destroy(ghostViewObject);
-                Destroy(ghostViewObject2);
+                GameObject.Destroy(ghostViewObject);
+                GameObject.Destroy(ghostViewObject2);
                 ghostViewObject = null;
                 ghostViewObject2 = null;
             }
@@ -726,41 +731,59 @@ namespace LunarMenu.Menu
             {
                 ghostViewObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 ghostViewObject2 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
+                GameObject.Destroy(ghostViewObject.GetComponent<Collider>());
+                GameObject.Destroy(ghostViewObject2.GetComponent<Collider>());
+
                 ghostViewObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
                 ghostViewObject2.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+
                 ghostViewObject.transform.position = GorillaTagger.Instance.rightHandTransform.position;
                 ghostViewObject2.transform.position = GorillaTagger.Instance.leftHandTransform.position;
+
                 ghostViewObject.transform.rotation = GorillaTagger.Instance.rightHandTransform.rotation;
                 ghostViewObject2.transform.rotation = GorillaTagger.Instance.leftHandTransform.rotation;
-                ColorChanger colorChanger = ghostViewObject.AddComponent<ColorChanger>();
+
+                var colorChanger = ghostViewObject.AddComponent<ColorChanger>();
                 colorChanger.colorInfo = new ExtGradient
                 {
                     colors = new GradientColorKey[]
-                {
+                    {
                 new GradientColorKey(currentColorA, 0f),
                 new GradientColorKey(currentColorB, 0.5f),
                 new GradientColorKey(currentColorA, 1f)
-                }
+                    }
                 };
-                colorChanger.Start();
-                ColorChanger colorChanger2 = ghostViewObject2.AddComponent<ColorChanger>();
+
+                var colorChanger2 = ghostViewObject2.AddComponent<ColorChanger>();
                 colorChanger2.colorInfo = new ExtGradient
                 {
                     colors = new GradientColorKey[]
-                {
+                    {
                 new GradientColorKey(currentColorA, 0f),
                 new GradientColorKey(currentColorB, 0.5f),
                 new GradientColorKey(currentColorA, 1f)
-                }
+                    }
                 };
+
+                colorChanger.Start();
                 colorChanger2.Start();
-                while (ghostViewObject != null)
-                {
-                    ghostViewObject.transform.position = GorillaTagger.Instance.rightHandTransform.position;
-                    ghostViewObject2.transform.position = GorillaTagger.Instance.leftHandTransform.position;
-                    ghostViewObject.transform.rotation = GorillaTagger.Instance.rightHandTransform.rotation;
-                    ghostViewObject2.transform.rotation = GorillaTagger.Instance.leftHandTransform.rotation;
-                }
+
+                GorillaTagger.Instance.StartCoroutine(UpdateGhostView());
+            }
+        }
+
+        private static IEnumerator UpdateGhostView()
+        {
+            while (ghostViewObject != null && ghostViewObject2 != null)
+            {
+                ghostViewObject.transform.position = player.rightControllerTransform.position;
+                ghostViewObject2.transform.position = player.leftControllerTransform.position;
+
+                ghostViewObject.transform.rotation = player.rightControllerTransform.rotation;
+                ghostViewObject2.transform.rotation = player.leftControllerTransform.rotation;
+
+                yield return null;
             }
         }
 
@@ -802,6 +825,8 @@ namespace LunarMenu.Menu
         public static float flySpeed = 15f;
         public static float asendSpeed = 1f;
 
+        public static int fakeLagDelayTime = 250;
+
         public static bool isAdmin = false;
 
         public static bool isInRoom = false;
@@ -810,11 +835,16 @@ namespace LunarMenu.Menu
 
         public static bool antiCheat = false;
         public static bool notiOndis = false;
+        public static bool InvisSpectator = false;
+        public static bool pcSpector = false;
 
         public static string currentRoom;
         public static string lastRoom;
         public static string memoriesarenice = PluginInfo.Name; // they are like this..., Why did I write this and make this? 5/5/2025
+        public static string platformType = "normal";
 
         public static GTPlayer player = GTPlayer.Instance; // Just in case that one day happens again when they change it from Player to GTPlayer
+
+        public static Vector3 invisPosition = new Vector3(99999f, 999999f, 999999f);
     }
 }

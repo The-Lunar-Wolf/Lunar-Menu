@@ -33,6 +33,7 @@ namespace LunarMenu.Menu
                 new ButtonInfo { buttonText = "FPS Counter", enableMethod =() => SettingsMods.EnableFPSCounter(), disableMethod =() => SettingsMods.DisableFPSCounter(), enabled = fpsCounter, toolTip = "Toggles the FPS counter."},
                 new ButtonInfo { buttonText = "Disconnect Button", enableMethod =() => SettingsMods.EnableDisconnectButton(), disableMethod =() => SettingsMods.DisableDisconnectButton(), enabled = disconnectButton, toolTip = "Toggles the disconnect button."},
                 new ButtonInfo { buttonText = "Go back...", method =() => SettingsMods.Goback(), isTogglable = false, toolTip = "Makes the menu back to what it orginally was..."},
+                new ButtonInfo { buttonText = "Save Preset", method =() => SettingsMods.SavePreset(), isTogglable = false, toolTip = "Saves all of the mods that are enabled right now so you do not have to enable them everytime you join the game."},
             },
 
             new ButtonInfo[] { // Movement Settings [3]
@@ -40,6 +41,10 @@ namespace LunarMenu.Menu
                 new ButtonInfo { buttonText = "Change Speed Boost", method =() => SettingsMods.ChangeSpeedBoost(), isTogglable = false, toolTip = "Your current speed is now " + Speed.ToString() + "."},
                 new ButtonInfo { buttonText = "Change Long Arm Length", method =() => SettingsMods.ChangeLongArmLength(), isTogglable = false, toolTip = "Your current Length is now " + ArmLen.ToString() + "."},
                 new ButtonInfo { buttonText = "Change Fly Speed", method =() => SettingsMods.ChangeFlySpeed(), isTogglable = false, toolTip = "Your current fly speed is now " + flySpeed.ToString() + "."},
+                new ButtonInfo { buttonText = "Change Platform Type", method =() => SettingsMods.ChangePlatformType(), isTogglable = false, toolTip = "Changes the type of you're platforms. Ex. from normal to invis."},
+                new ButtonInfo { buttonText = "Change Fake Lag Delay", method =() => SettingsMods.ChangeFakeLagDelayTime(), isTogglable = false, toolTip = "Changes the delay time of fake lag."},
+                new ButtonInfo { buttonText = "Invis Spectator", method =() => SettingsMods.EnableInvisSpectator(), disableMethod =() => SettingsMods.DisableInvisSpectator(), isTogglable = true, toolTip = "Makes you invisble while you spectate a player."},
+                new ButtonInfo { buttonText = "Pc Spectator", method =() => SettingsMods.EnablePcSpectator(), disableMethod =() => SettingsMods.DisablePcSpectator(), isTogglable = true, toolTip = "Makes your pc spectate the player you want."},
             },
 
             new ButtonInfo[] { // Projectile Settings [4]
@@ -67,6 +72,8 @@ namespace LunarMenu.Menu
                 new ButtonInfo { buttonText = "Car Monkey", method =() => Movement.CarMonkey(), isTogglable = true, toolTip = "Makes it of where you become a car."},
                 new ButtonInfo { buttonText = "Rig Gun", method =() => Movement.RigGun(), isTogglable = true, toolTip = "Allows you to teleport your rig."},
                 new ButtonInfo { buttonText = "Ascend <color=gray>[</color><color=green>Primary</color><color=gray>]</color>", method =() => Movement.Ascend(), isTogglable = true, toolTip = "Allows you to fly your rig up."},
+                new ButtonInfo { buttonText = "Fake Lag", method =() => Movement.FakeLag(), isTogglable = true, disableMethod =() => Movement.FixRig(), toolTip = "Freezes you're rig and unfreezes you're rig."},
+                new ButtonInfo { buttonText = "Spectator Gun <color=gray>[</color><color=red>This has not been tested.</color><color=gray>]</color>", method =() => Movement.SpectatorGun(), isTogglable = true, toolTip = "Gives you a gun that makes you spectate the player that you want to spectate."},
             },
 
             new ButtonInfo[] // OverPowered [6]

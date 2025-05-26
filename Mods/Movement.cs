@@ -1,4 +1,5 @@
 ﻿using LunarMenu.Classes;
+using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
 using static LunarMenu.Classes.CoolDown;
@@ -11,6 +12,7 @@ namespace LunarMenu.Mods
     {
         public static void PlatForms()
         {
+
             if (ControllerInputPoller.instance.rightGrab)
             {
                 if (platr == null)
@@ -19,17 +21,26 @@ namespace LunarMenu.Mods
                     platr.transform.localScale = new Vector3(0.025f, 0.3f, 0.4f);
                     platr.transform.position = GorillaTagger.Instance.rightHandTransform.position;
                     platr.transform.rotation = GorillaTagger.Instance.rightHandTransform.rotation;
-                    ColorChanger colorChanger = platr.AddComponent<ColorChanger>();
-                    colorChanger.colorInfo = new ExtGradient
+                    platr.AddComponent<GorillaSurfaceOverride>().overrideIndex = 165;
+
+                    if (platformType == "normal")
                     {
-                        colors = new GradientColorKey[]
-                    {
-                new GradientColorKey(currentColorA, 0f),
-                new GradientColorKey(currentColorB, 0.5f),
-                new GradientColorKey(currentColorA, 1f)
+                        ColorChanger colorChanger = platr.AddComponent<ColorChanger>();
+                        colorChanger.colorInfo = new ExtGradient
+                        {
+                            colors = new GradientColorKey[]
+                            {
+                        new GradientColorKey(currentColorA, 0f),
+                        new GradientColorKey(currentColorB, 0.5f),
+                        new GradientColorKey(currentColorA, 1f)
+                            }
+                        };
+                        colorChanger.Start();
                     }
-                    };
-                    colorChanger.Start();
+                    else if (platformType == "invis")
+                    {
+                        platr.GetComponent<Renderer>().enabled = false;
+                    }
                 }
             }
             else
@@ -49,17 +60,25 @@ namespace LunarMenu.Mods
                     platl.transform.localScale = new Vector3(0.025f, 0.3f, 0.4f);
                     platl.transform.position = GorillaTagger.Instance.leftHandTransform.position;
                     platl.transform.rotation = GorillaTagger.Instance.leftHandTransform.rotation;
-                    ColorChanger colorChanger = platl.AddComponent<ColorChanger>();
-                    colorChanger.colorInfo = new ExtGradient
+                    platl.AddComponent<GorillaSurfaceOverride>().overrideIndex = 165;
+                    if (platformType == "normal")
                     {
-                        colors = new GradientColorKey[]
-                    {
-                new GradientColorKey(currentColorA, 0f),
-                new GradientColorKey(currentColorB, 0.5f),
-                new GradientColorKey(currentColorA, 1f)
+                        ColorChanger colorChanger = platl.AddComponent<ColorChanger>();
+                        colorChanger.colorInfo = new ExtGradient
+                        {
+                            colors = new GradientColorKey[]
+                            {
+                        new GradientColorKey(currentColorA, 0f),
+                        new GradientColorKey(currentColorB, 0.5f),
+                        new GradientColorKey(currentColorA, 1f)
+                            }
+                        };
+                        colorChanger.Start();
                     }
-                    };
-                    colorChanger.Start();
+                    else if (platformType == "invis")
+                    {
+                        platl.GetComponent<Renderer>().enabled = false;
+                    }
                 }
             }
             else
@@ -71,6 +90,7 @@ namespace LunarMenu.Mods
                 }
             }
         }
+
 
         public static void SpeedBoost()
         {
@@ -140,17 +160,24 @@ namespace LunarMenu.Mods
                     frozoneObject.transform.position = GorillaTagger.Instance.rightHandTransform.position;
                     frozoneObject.transform.rotation = GorillaTagger.Instance.rightHandTransform.rotation;
                     frozoneObject.AddComponent<GorillaSurfaceOverride>().overrideIndex = 61;
-                    ColorChanger colorChanger = frozoneObject.AddComponent<ColorChanger>();
-                    colorChanger.colorInfo = new ExtGradient
+                    if (platformType == "normal")
                     {
-                        colors = new GradientColorKey[]
-                    {
+                        ColorChanger colorChanger = frozoneObject.AddComponent<ColorChanger>();
+                        colorChanger.colorInfo = new ExtGradient
+                        {
+                            colors = new GradientColorKey[]
+                        {
                 new GradientColorKey(currentColorA, 0f),
                 new GradientColorKey(currentColorB, 0.5f),
                 new GradientColorKey(currentColorA, 1f)
+                        }
+                        };
+                        colorChanger.Start();
                     }
-                    };
-                    colorChanger.Start();
+                    else if (platformType == "invis")
+                    {
+                        frozoneObject.GetComponent<Renderer>().material.color = Color.clear;
+                    }
                 }
                 else
                 {
@@ -175,17 +202,24 @@ namespace LunarMenu.Mods
                     frozoneObject2.transform.position = GorillaTagger.Instance.leftHandTransform.position;
                     frozoneObject2.transform.rotation = GorillaTagger.Instance.leftHandTransform.rotation;
                     frozoneObject2.AddComponent<GorillaSurfaceOverride>().overrideIndex = 61;
-                    ColorChanger colorChanger = frozoneObject2.AddComponent<ColorChanger>();
-                    colorChanger.colorInfo = new ExtGradient
+                    if (platformType == "normal")
                     {
-                        colors = new GradientColorKey[]
-                    {
+                        ColorChanger colorChanger = frozoneObject2.AddComponent<ColorChanger>();
+                        colorChanger.colorInfo = new ExtGradient
+                        {
+                            colors = new GradientColorKey[]
+                        {
                 new GradientColorKey(currentColorA, 0f),
                 new GradientColorKey(currentColorB, 0.5f),
                 new GradientColorKey(currentColorA, 1f)
+                        }
+                        };
+                        colorChanger.Start();
                     }
-                    };
-                    colorChanger.Start();
+                    else if (platformType == "invis")
+                    {
+                        frozoneObject2.GetComponent<Renderer>().material.color = Color.clear;
+                    }
                 }
                 else
                 {
@@ -209,17 +243,17 @@ namespace LunarMenu.Mods
             {
                 if (ControllerInputPoller.instance.leftControllerPrimaryButton)
                 {
-                    GorillaTagger.Instance.offlineVRRig.enabled = false;
                     if (ghostViewObject == null)
                     {
+                        GorillaTagger.Instance.offlineVRRig.enabled = false;
                         ToggleGhostView();
                     }
                 }
                 else
                 {
-                    GorillaTagger.Instance.offlineVRRig.enabled = true;
                     if (ghostViewObject != null)
                     {
+                        GorillaTagger.Instance.offlineVRRig.enabled = true;
                         ToggleGhostView();
                     }
                 }
@@ -228,17 +262,17 @@ namespace LunarMenu.Mods
             {
                 if (ControllerInputPoller.instance.rightControllerPrimaryButton)
                 {
-                    GorillaTagger.Instance.offlineVRRig.enabled = false;
                     if (ghostViewObject == null)
                     {
+                        GorillaTagger.Instance.offlineVRRig.enabled = false;
                         ToggleGhostView();
                     }
                 }
                 else
                 {
-                    GorillaTagger.Instance.offlineVRRig.enabled = true;
                     if (ghostViewObject != null)
                     {
+                        GorillaTagger.Instance.offlineVRRig.enabled = true;
                         ToggleGhostView();
                     }
                 }
@@ -251,18 +285,18 @@ namespace LunarMenu.Mods
             {
                 if (ControllerInputPoller.instance.leftControllerSecondaryButton)
                 {
-                    GorillaTagger.Instance.offlineVRRig.enabled = false;
-                    GorillaTagger.Instance.offlineVRRig.transform.position = new Vector3(99999f, 999999f, 999999f);
                     if (ghostViewObject == null)
                     {
+                        GorillaTagger.Instance.offlineVRRig.enabled = false;
+                        GorillaTagger.Instance.offlineVRRig.transform.position = invisPosition;
                         ToggleGhostView();
                     }
                 }
                 else
                 {
-                    GorillaTagger.Instance.offlineVRRig.enabled = true;
                     if (ghostViewObject != null)
                     {
+                        GorillaTagger.Instance.offlineVRRig.enabled = true;
                         ToggleGhostView();
                     }
                 }
@@ -271,18 +305,18 @@ namespace LunarMenu.Mods
             {
                 if (ControllerInputPoller.instance.rightControllerSecondaryButton)
                 {
-                    GorillaTagger.Instance.offlineVRRig.enabled = false;
-                    GorillaTagger.Instance.offlineVRRig.transform.position = new Vector3(99999f, 999999f, 999999f);
                     if (ghostViewObject == null)
                     {
+                        GorillaTagger.Instance.offlineVRRig.enabled = false;
+                        GorillaTagger.Instance.offlineVRRig.transform.position = invisPosition;
                         ToggleGhostView();
                     }
                 }
                 else
                 {
-                    GorillaTagger.Instance.offlineVRRig.enabled = true;
                     if (ghostViewObject != null)
                     {
+                        GorillaTagger.Instance.offlineVRRig.enabled = true;
                         ToggleGhostView();
                     }
                 }
@@ -556,6 +590,82 @@ namespace LunarMenu.Mods
                         collider.enabled = true;
                     }
                 }
+            }
+        }
+
+        public static async void FakeLag()
+        {
+            if (await Delay(fakeLagDelayTime))
+            {
+                GorillaTagger.Instance.offlineVRRig.enabled = !GorillaTagger.Instance.offlineVRRig.enabled;
+            }
+        }
+
+        public static void FixRig()
+        {
+            GorillaTagger.Instance.offlineVRRig.enabled = true;
+        }
+
+        private static bool isSpectator = false;
+        public static async void SpectatorGun()
+        {
+            if (rightHanded)
+            {
+                if (ControllerInputPoller.instance.leftGrab)
+                {
+                    var gunInfo = CreateGun();
+                    if (ControllerInputPoller.instance.leftControllerIndexFloat > 0f && await Delay(1000))
+                    {
+                        VRRig a = gunInfo.ray.collider.GetComponent<VRRig>();
+                        if (a == GorillaTagger.Instance.offlineVRRig) { return; }
+                        isSpectator = !isSpectator;
+                        GorillaTagger.Instance.StartCoroutine(Spectate(a, gunInfo.pointer));
+                    }
+                }
+            }
+            else
+            {
+                if (ControllerInputPoller.instance.rightGrab)
+                {
+                    var gunInfo = CreateGun();
+                    if (ControllerInputPoller.instance.rightControllerIndexFloat > 0f && await Delay(1000))
+                    {
+                        VRRig a = gunInfo.ray.collider.GetComponent<VRRig>();
+                        if (a == GorillaTagger.Instance.offlineVRRig) { return; }
+                        isSpectator = !isSpectator;
+                        GorillaTagger.Instance.StartCoroutine(Spectate(a, gunInfo.pointer));
+                    }
+                }
+            }
+        }
+
+        private static IEnumerator Spectate(VRRig spectPlayer, GameObject pointer)
+        {
+            if (InvisSpectator)
+            {
+                GorillaTagger.Instance.offlineVRRig.enabled = false;
+                GorillaTagger.Instance.offlineVRRig.transform.position = invisPosition;
+                ToggleGhostView();
+            }
+
+            while (isSpectator)
+            {
+                pointer.transform.position = spectPlayer.transform.position;
+                if (pcSpector)
+                {
+                    GorillaTagger.Instance.thirdPersonCamera.transform.position = spectPlayer.transform.position + ((spectPlayer.transform.up * 2.05f) + (-spectPlayer.transform.forward * 2.05f));
+                }
+                else
+                {
+                    GorillaTagger.Instance.transform.position = spectPlayer.transform.position + ((spectPlayer.transform.up * 2.05f) + (-spectPlayer.transform.forward * 2.05f));
+                }
+
+                yield return null;
+            }
+
+            if (!isSpectator) 
+            {
+                GorillaTagger.Instance.offlineVRRig.enabled = true;
             }
         }
     }

@@ -1,6 +1,10 @@
 ﻿using LunarMenu.Classes;
+using LunarMenu.Menu;
+using System.IO;
+using UnityEngine;
 using static LunarMenu.Menu.Main;
 using static LunarMenu.Settings;
+using static LunarMenu.Menu.Buttons;
 
 namespace LunarMenu.Mods
 {
@@ -139,6 +143,79 @@ namespace LunarMenu.Mods
             {
                 flySpeed = 15f;
             }
+        }
+
+        public static void ChangePlatformType()
+        {
+            if (platformType == "normal")
+            {
+                platformType = "invis";
+            }
+            else if (platformType == "invis")
+            {
+                platformType = "normal";
+            }
+        }
+
+        private static string Mods;
+        public static void SavePreset()
+        {
+            Mods = string.Empty;
+            string lunarMenuPath = Path.Combine(Application.persistentDataPath, "LunarMenu");
+
+            if (!Directory.Exists(lunarMenuPath))
+            {
+                Directory.CreateDirectory(lunarMenuPath);
+            }
+
+            foreach (ButtonInfo[] buttonGroup in buttons)
+            {
+                foreach (ButtonInfo button in buttonGroup)
+                {
+                    if (button.enabled)
+                    {
+                        Mods += button.buttonText + ";";
+                    }
+                }
+            }
+
+            File.WriteAllText(Path.Combine(lunarMenuPath, "LunarMenuPreset"), Mods);
+        }
+
+        public static void ChangeFakeLagDelayTime()
+        {
+            if (fakeLagDelayTime == 250)
+            {
+                fakeLagDelayTime = 1000;
+            }
+            else if (fakeLagDelayTime == 1000)
+            {
+                fakeLagDelayTime = 2000;
+            }
+            else if (fakeLagDelayTime == 2000)
+            {
+                fakeLagDelayTime = 250;
+            }
+        }
+
+        public static void EnableInvisSpectator()
+        {
+            InvisSpectator = true;
+        }
+
+        public static void DisableInvisSpectator()
+        {
+            InvisSpectator = false;
+        }
+
+        public static void EnablePcSpectator()
+        {
+            pcSpector = true;
+        }
+
+        public static void DisablePcSpectator()
+        {
+            pcSpector = false;
         }
     }
 }

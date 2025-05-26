@@ -36,14 +36,42 @@ namespace LunarMenu.Mods
 
         public static void RideDoug()
         {
-            GorillaTagger.Instance.transform.position = GameObject.Find("Floating Bug Holdable").transform.position;
-            GorillaTagger.Instance.transform.rotation = GameObject.Find("Floating Bug Holdable").transform.rotation;
+            if (rightHanded)
+            {
+                if (ControllerInputPoller.instance.leftGrab)
+                {
+                    GorillaTagger.Instance.transform.position = GameObject.Find("Floating Bug Holdable").transform.position;
+                    GorillaTagger.Instance.transform.rotation = GameObject.Find("Floating Bug Holdable").transform.rotation;
+                }
+            }
+            else
+            {
+                if (ControllerInputPoller.instance.rightGrab)
+                {
+                    GorillaTagger.Instance.transform.position = GameObject.Find("Floating Bug Holdable").transform.position;
+                    GorillaTagger.Instance.transform.rotation = GameObject.Find("Floating Bug Holdable").transform.rotation;
+                }
+            }
         }
 
         public static void RideMat()
         {
-            GorillaTagger.Instance.transform.position = GameObject.Find("Cave Bat Holdable").transform.position;
-            GorillaTagger.Instance.transform.rotation = GameObject.Find("Cave Bat Holdable").transform.rotation;
+            if (rightHanded)
+            {
+                if (ControllerInputPoller.instance.leftGrab)
+                {
+                    GorillaTagger.Instance.transform.position = GameObject.Find("Cave Bat Holdable").transform.position;
+                    GorillaTagger.Instance.transform.rotation = GameObject.Find("Cave Bat Holdable").transform.rotation;
+                }
+            }
+            else
+            {
+                if (ControllerInputPoller.instance.rightGrab)
+                {
+                    GorillaTagger.Instance.transform.position = GameObject.Find("Cave Bat Holdable").transform.position;
+                    GorillaTagger.Instance.transform.rotation = GameObject.Find("Cave Bat Holdable").transform.rotation;
+                }
+            }
         }
 
         public static void DougGun()
